@@ -1,14 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField, Card, CardContent, CardActions, Button, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
+import Checkbox from '@mui/material/Checkbox'
+
 
 export const TodoListForm = ({ todoList, saveTodoList }) => {
   const [todos, setTodos] = useState(todoList.todos)
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    saveTodoList(todoList.id, { todos })
+    saveTodoList(todoList.id, todos)
+  }
+
+  //Auto save task
+  /*useEffect(() => {
+    saveTodoList(todoList.id, todos)
+  }, [todos])*/
+
+  const updateTodos = (key, value, index) => {
+    const updatedTask = [
+      // immutable update
+      ...todos.slice(0, index),
+      {
+        ...todos[index],
+        [key]: value,
+      },
+      ...todos.slice(index + 1),
+    ]
+    setTodos(updatedTask)
   }
 
   return (
@@ -19,22 +39,21 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
           onSubmit={handleSubmit}
           style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}
         >
-          {todos.map((name, index) => (
+          {todos.map(({ task, completed }, index) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+              <Checkbox
+                onChange={(event) => updateTodos('completed', !completed, index)}
+                checked={completed}
+              />
               <Typography sx={{ margin: '8px' }} variant='h6'>
                 {index + 1}
               </Typography>
               <TextField
                 sx={{ flexGrow: 1, marginTop: '1rem' }}
-                label='What to do?'
-                value={name}
+                label={completed ? 'Completed' : 'What to do?'}
+                value={task}
                 onChange={(event) => {
-                  setTodos([
-                    // immutable update
-                    ...todos.slice(0, index),
-                    event.target.value,
-                    ...todos.slice(index + 1),
-                  ])
+                  updateTodos('task', event.target.value, index)
                 }}
               />
               <Button
@@ -57,13 +76,11 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
             <Button
               type='button'
               color='primary'
-              onClick={() => {
-                setTodos([...todos, ''])
-              }}
+              onClick={() => setTodos([...todos, { task: '', completed: false }])}
             >
               Add Todo <AddIcon />
             </Button>
-            <Button type='submit' variant='contained' color='primary'>
+            <Button type='submit' variant='contained' color='primary' onClick={handleSubmit}>
               Save
             </Button>
           </CardActions>
