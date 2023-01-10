@@ -1,6 +1,4 @@
-import { BASE_URL } from "../constant/backend"
-
-// API services
+import { BASE_URL } from '../constant/backend'
 
 // Get all todos with existing list
 export const fetchTodoLists = async () => {
@@ -13,7 +11,7 @@ export const fetchTodoLists = async () => {
   }
 }
 
-// Send to backend to save todos with list
+// Send to backend for saving todos with list
 export const saveTodoList = async (data) => {
   const requestOptions = {
     method: 'POST',
