@@ -1,6 +1,6 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography } from '@mui/material'
-import { TodoLists } from './components/Todos/TodoLists'
+import { TodoLists } from './components/todos/TodoLists'
 
 const MainAppBar = () => {
   return (
