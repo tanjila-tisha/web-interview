@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { TextField, Card, CardContent, CardActions, Button, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -6,15 +6,12 @@ import Checkbox from '@mui/material/Checkbox'
 import Tooltip from '@mui/material/Tooltip'
 import Alert from '@mui/material/Alert'
 import Stack from '@mui/material/Stack'
+import { TodoContext } from './TodoLists'
 
-export const TodoListForm = ({
-  todoList,
-  saveTodoList,
-  isButtonDisable,
-  setIsButtonDisable,
-  confirmationMsg,
-  setConfirmationMsg,
-}) => {
+export const TodoListForm = ({ todoList, saveTodoList }) => {
+  const { saveButton, message } = useContext(TodoContext)
+  const [isButtonDisabled, setIsButtonDisabled] = saveButton
+  const [confirmationMsg, setConfirmationMsg] = message
   const [todos, setTodos] = useState(todoList.todos)
 
   const handleSubmit = (event) => {
@@ -39,7 +36,7 @@ export const TodoListForm = ({
     ]
     setConfirmationMsg({})
     setTodos(updatedTask)
-    setIsButtonDisable(false)
+    setIsButtonDisabled(false)
   }
 
   return (
@@ -103,7 +100,7 @@ export const TodoListForm = ({
               variant='contained'
               color='primary'
               onClick={handleSubmit}
-              disabled={isButtonDisable}
+              disabled={isButtonDisabled}
             >
               Save
             </Button>
