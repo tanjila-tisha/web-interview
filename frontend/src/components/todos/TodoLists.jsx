@@ -42,7 +42,7 @@ export const TodoLists = ({ style }) => {
         setIsButtonDisabled(false)
         setConfirmationMsg({
           status: 'error',
-          message: 'Unfortunately There is en error. Please try again.',
+          message: 'Unfortunately, there is en error. Please try again',
         })
       }
     })
@@ -55,7 +55,7 @@ export const TodoLists = ({ style }) => {
     <Fragment>
       <Card style={style}>
         <CardContent>
-          <Typography component='h2'>My Todo Lists</Typography>
+          <Typography variant='h4'>My Todo Lists</Typography>
           <List>
             {Object.keys(todoLists).map((key) => {
               const isCompleted =
