@@ -1,0 +1,25 @@
+.todosForm {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.todoItem {
+  display: flex;
+  align-items: center;
+}
+
+.todoItem__datePicker {
+  flex-grow: 1;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  width: 25%;
+}
+
+.todoItem__reminder {
+  flex-grow: 1;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  font-size: 24px;
+  width: 20%;
+}
