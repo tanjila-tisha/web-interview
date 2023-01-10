@@ -10,12 +10,13 @@ const PORT = 3001
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-
+// Creating new directory and writing data to the file
 const writeFile = async(data) => {
   await fs.mkdir('data', { recursive: true })
   await fs.writeFile('data/todos.json', JSON.stringify(data))
 }
 
+// Endpoint for sending todo list 
 app.get('/todos', async (req, res) => {
   let content;
   try {
@@ -40,6 +41,7 @@ app.get('/todos', async (req, res) => {
   }
 })
 
+// Endpoint for saving todo list
 app.post('/todos', async (req, res) => {
   writeFile(req.body)
   res.sendStatus(201)
