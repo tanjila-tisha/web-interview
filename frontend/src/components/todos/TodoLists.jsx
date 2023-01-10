@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect, createContext } from 'react'
 import {
   Card,
   CardContent,
@@ -15,10 +15,12 @@ import Tooltip from '@mui/material/Tooltip'
 import { fetchTodoLists, saveTodoList } from '../../data/todoServices'
 import { isTodoListCompleted } from '../../utils/todos'
 
+export const TodoContext = createContext()
+
 export const TodoLists = ({ style }) => {
   const [todoLists, setTodoLists] = useState({})
   const [activeList, setActiveList] = useState()
-  const [isButtonDisable, setIsButtonDisable] = useState(true)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const [confirmationMsg, setConfirmationMsg] = useState({})
 
   useEffect(() => {
@@ -34,10 +36,10 @@ export const TodoLists = ({ style }) => {
 
     saveTodoList(updatedList).then((status) => {
       if (status === 201) {
-        setIsButtonDisable(true)
+        setIsButtonDisabled(true)
         setConfirmationMsg({ status: 'success', message: 'Todos has been saved successfully' })
       } else {
-        setIsButtonDisable(false)
+        setIsButtonDisabled(false)
         setConfirmationMsg({
           status: 'error',
           message: 'Unfortunately There is en error. Please try again.',
@@ -84,15 +86,18 @@ export const TodoLists = ({ style }) => {
         </CardContent>
       </Card>
       {todoLists[activeList] && (
-        <TodoListForm
-          key={activeList} // use key to make React recreate component to reset internal state
-          todoList={todoLists[activeList]}
-          saveTodoList={handleSave}
-          isButtonDisable={isButtonDisable}
-          setIsButtonDisable={setIsButtonDisable}
-          confirmationMsg={confirmationMsg}
-          setConfirmationMsg={setConfirmationMsg}
-        />
+        <TodoContext.Provider
+          value={{
+            saveButton: [isButtonDisabled, setIsButtonDisabled],
+            message: [confirmationMsg, setConfirmationMsg],
+          }}
+        >
+          <TodoListForm
+            key={activeList} // use key to make React recreate component to reset internal state
+            todoList={todoLists[activeList]}
+            saveTodoList={handleSave}
+          />
+        </TodoContext.Provider>
       )}
     </Fragment>
   )
